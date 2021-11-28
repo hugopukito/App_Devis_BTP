@@ -1,4 +1,5 @@
 import com.spire.doc.Document;
+import com.spire.doc.documents.UnderlineStyle;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,6 +20,9 @@ public class main {
         doc.AddRightIndentation();
 
         doc.AddSpace(1, 40f);
+        doc.AddSpace(4, 98f);
+
+        doc.CreateTable();
 
         doc.SaveDoc("output.docx");
     }

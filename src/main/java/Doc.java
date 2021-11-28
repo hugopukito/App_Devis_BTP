@@ -1,21 +1,26 @@
-import com.spire.doc.Document;
-import com.spire.doc.FileFormat;
-import com.spire.doc.Section;
-import com.spire.doc.documents.HorizontalAlignment;
-import com.spire.doc.documents.Paragraph;
-import com.spire.doc.documents.ParagraphStyle;
+import com.spire.doc.*;
+import com.spire.doc.documents.*;
+import com.spire.doc.fields.TextRange;
 
 public class Doc {
 
-    Document document;
-    Section section;
-    Paragraph[] paragraphs = new Paragraph[5];
-    String[] strings = {
+    private Document document;
+    private Section section;
+    private Paragraph[] paragraphs = new Paragraph[5];
+    private String[] texts = {
         "A DOMÉRAT, ",
         "Le 18 novembre 2021",
         " Mme & Mr CLÉMENT",
         "18 Rue des Chapelettes",
         "03410 DOMÉRAT "
+    };
+
+    private String[] tableHeader = {"DEVIS N°2021-239", "", "", ""};
+    private String[][] tableData = {
+            new String[]{"Argentina", "Buenos Aires", "South America", "2777815"},
+            new String[]{"Argentina", "Buenos Aires", "South America", "2777815"},
+            new String[]{"Argentina", "Buenos Aires", "South America", "2777815"},
+            new String[]{"Argentina", "Buenos Aires", "South America", "2777815"},
     };
 
     public Doc(Document document) {
@@ -24,13 +29,16 @@ public class Doc {
     }
 
     public void SetTopMargin () {
-        section.getPageSetup().getMargins().setTop(56f);
+        section.getPageSetup().getMargins().setTop(56.6f);
+        section.getPageSetup().getMargins().setBottom(70.75f);
+        section.getPageSetup().getMargins().setLeft(28.3f);
+        section.getPageSetup().getMargins().setRight(28.3f);
     }
 
     public void CreateParagraph () {
         for (int i = 0; i < paragraphs.length; i++) {
             paragraphs[i] = section.addParagraph();
-            paragraphs[i].appendText(strings[i]);
+            paragraphs[i].appendText(texts[i]);
         }
     }
 
@@ -60,13 +68,12 @@ public class Doc {
     }
 
     //Specific for our paragraphs array
-
     public void AddRightIndentation () {
-        paragraphs[0].getFormat().setRightIndent(117);
-        paragraphs[1].getFormat().setRightIndent(85);
-        paragraphs[2].getFormat().setRightIndent(74);
-        paragraphs[3].getFormat().setRightIndent(76);
-        paragraphs[4].getFormat().setRightIndent(85);
+        paragraphs[0].getFormat().setRightIndent(139);
+        paragraphs[1].getFormat().setRightIndent(107);
+        paragraphs[2].getFormat().setRightIndent(96);
+        paragraphs[3].getFormat().setRightIndent(98);
+        paragraphs[4].getFormat().setRightIndent(106);
     }
 
     public void AddSpace (int para, float space) {
@@ -75,5 +82,43 @@ public class Doc {
 
     public void SaveDoc (String output) {
         document.saveToFile(output, FileFormat.Docx);
+    }
+
+    public void CreateTable () {
+
+        // Add a table
+        Table table = section.addTable(false);
+        table.resetCells(tableData.length + 1, tableHeader.length);
+        table.getTableFormat().setLeftIndent(5.5f);
+
+        // Set the first row as table header
+        TableRow row = table.getRows().get(0);
+        row.isHeader(true);
+        row.setHeight(14);
+        row.setHeightType(TableRowHeightType.Exactly);
+
+        row.getCells().get(0).setCellWidth(57, CellWidthType.Percentage);
+        row.getCells().get(1).setCellWidth(9, CellWidthType.Percentage);
+        row.getCells().get(2).setCellWidth(9, CellWidthType.Percentage);
+        row.getCells().get(3).setCellWidth(25, CellWidthType.Percentage);
+
+        for (int i = 0; i < tableHeader.length; i++) {
+            row.getCells().get(i).getCellFormat().setVerticalAlignment(VerticalAlignment.Middle);
+            Paragraph p = row.getCells().get(i).addParagraph();
+            p.getFormat().setHorizontalAlignment(HorizontalAlignment.Center);
+            TextRange txtRange = p.appendText(tableHeader[i]);
+            txtRange.getCharacterFormat().setUnderlineStyle(UnderlineStyle.Single);
+        }
+
+        //Add data to the rest of rows
+        for (int r = 0; r < tableData.length; r++) {
+            TableRow dataRow = table.getRows().get(r + 1);
+            dataRow.setHeight(14);
+            dataRow.setHeightType(TableRowHeightType.Exactly);
+            for (int c = 0; c < tableData[r].length; c++) {
+                dataRow.getCells().get(c).getCellFormat().setVerticalAlignment(VerticalAlignment.Middle);
+                dataRow.getCells().get(c).addParagraph().appendText(tableData[r][c]);
+            }
+        }
     }
 }
