@@ -2,6 +2,8 @@ import com.spire.doc.*;
 import com.spire.doc.documents.*;
 import com.spire.doc.fields.TextRange;
 
+import java.awt.*;
+
 public class Doc {
 
     private Document document;
@@ -16,12 +18,7 @@ public class Doc {
     };
 
     private String[] tableHeader = {"DEVIS N°2021-239", "", "", ""};
-    private String[][] tableData = {
-            new String[]{"Argentina", "Buenos Aires", "South America", "2777815"},
-            new String[]{"Argentina", "Buenos Aires", "South America", "2777815"},
-            new String[]{"Argentina", "Buenos Aires", "South America", "2777815"},
-            new String[]{"Argentina", "Buenos Aires", "South America", "2777815"},
-    };
+    private String[][] tableData = new tableData().getTable();
 
     public Doc(Document document) {
         this.document = document;
@@ -32,7 +29,7 @@ public class Doc {
         section.getPageSetup().getMargins().setTop(56.6f);
         section.getPageSetup().getMargins().setBottom(70.75f);
         section.getPageSetup().getMargins().setLeft(28.3f);
-        section.getPageSetup().getMargins().setRight(28.3f);
+        section.getPageSetup().getMargins().setRight(37.5f);
     }
 
     public void CreateParagraph () {
@@ -69,11 +66,11 @@ public class Doc {
 
     //Specific for our paragraphs array
     public void AddRightIndentation () {
-        paragraphs[0].getFormat().setRightIndent(139);
-        paragraphs[1].getFormat().setRightIndent(107);
-        paragraphs[2].getFormat().setRightIndent(96);
-        paragraphs[3].getFormat().setRightIndent(98);
-        paragraphs[4].getFormat().setRightIndent(106);
+        paragraphs[0].getFormat().setRightIndent(130);
+        paragraphs[1].getFormat().setRightIndent(98);
+        paragraphs[2].getFormat().setRightIndent(85);
+        paragraphs[3].getFormat().setRightIndent(86);
+        paragraphs[4].getFormat().setRightIndent(98);
     }
 
     public void AddSpace (int para, float space) {
@@ -93,21 +90,23 @@ public class Doc {
 
         // Set the first row as table header
         TableRow row = table.getRows().get(0);
-        row.isHeader(true);
+        row.isHeader(false);
         row.setHeight(14);
         row.setHeightType(TableRowHeightType.Exactly);
 
         row.getCells().get(0).setCellWidth(57, CellWidthType.Percentage);
-        row.getCells().get(1).setCellWidth(9, CellWidthType.Percentage);
-        row.getCells().get(2).setCellWidth(9, CellWidthType.Percentage);
-        row.getCells().get(3).setCellWidth(25, CellWidthType.Percentage);
+        row.getCells().get(1).setCellWidth(13, CellWidthType.Percentage);
+        row.getCells().get(2).setCellWidth(13, CellWidthType.Percentage);
+        row.getCells().get(3).setCellWidth(16, CellWidthType.Percentage);
 
+        // Devis n°XXXX-XXX
         for (int i = 0; i < tableHeader.length; i++) {
             row.getCells().get(i).getCellFormat().setVerticalAlignment(VerticalAlignment.Middle);
             Paragraph p = row.getCells().get(i).addParagraph();
-            p.getFormat().setHorizontalAlignment(HorizontalAlignment.Center);
+            p.getFormat().setLeftIndent(94f);
             TextRange txtRange = p.appendText(tableHeader[i]);
             txtRange.getCharacterFormat().setUnderlineStyle(UnderlineStyle.Single);
+            txtRange.getCharacterFormat().setTextColor(Color.RED);
         }
 
         //Add data to the rest of rows
