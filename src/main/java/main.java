@@ -1,13 +1,16 @@
 import com.spire.doc.Document;
+import com.spire.doc.Section;
+import com.spire.doc.Table;
+import com.spire.doc.TableCell;
 import com.spire.doc.documents.UnderlineStyle;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class main {
-    public static void main (String[] args){
+    public static void main(String[] args) throws Exception {
 
-        Doc doc = new Doc(new Document());
+        /*Doc doc = new Doc(new Document());
 
         doc.SetTopMargin();
 
@@ -24,6 +27,15 @@ public class main {
 
         doc.CreateTable();
 
-        doc.SaveDoc("output.docx");
+        doc.SaveDoc("output.docx");*/
+
+        UpdateTable doc = new UpdateTable(new Document());
+        String s = doc.ReadTable(6,1);
+        String s2 = doc.ReadTable(6,2);
+        String s3 = doc.MultiplyCells(s,s2);
+        doc.SetCell(6,3,s3);
+        doc.SaveDoc("output2.docx");
     }
+
+
 }
