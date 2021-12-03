@@ -35,6 +35,9 @@ public class main {
         String s3 = doc.MultiplyCells(s,s2);
         doc.SetCell(6,3,s3);
         doc.SaveDoc("output2.docx");
+        float f = 10.5f;
+        String.format("%.2f", f);
+        System.out.println(f);
     }
 
 

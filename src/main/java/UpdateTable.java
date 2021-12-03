@@ -6,6 +6,8 @@ import com.spire.doc.*;
 import com.spire.doc.collections.ParagraphCollection;
 import com.spire.doc.documents.Paragraph;
 
+import java.text.DecimalFormat;
+
 public class UpdateTable {
 
     private Document document;
@@ -31,7 +33,37 @@ public class UpdateTable {
         float c1 = StringToFloat(cell1);
         float c2 = StringToFloat(cell2);
         String c3 = String.format("%.2f", c1*c2);
-        return c3 = c3 + " €";
+        return PlacePrice(c3);
+    }
+
+    public String PlacePrice (String s) {
+
+        int i = s.length();
+
+        switch (i) {
+            // 5,00 €
+            case 4 :
+                return s = "            " + s + " €";
+
+            // 50,00 €
+            case 5:
+                return s = "          " + s + " €";
+
+            // 500,00 €
+            case 6:
+                return s = "        " + s + " €";
+
+            // 5 000,00 €
+            case 7:
+                return s = "      " + s + " €";
+
+            // 50 000,00 €
+            case 8:
+                return s = "    " + s + " €";
+
+            default:
+                return s = s + " €";
+        }
     }
 
     public void SetCell (int row, int column, String value) {
