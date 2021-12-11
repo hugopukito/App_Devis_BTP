@@ -30,8 +30,8 @@ public class UpdateTable {
     }
 
     public String MultiplyCells (String cell1, String cell2) {
-        float c1 = StringToFloat(cell1);
-        float c2 = StringToFloat(cell2);
+        float c1 = StringToFloatLeft(cell1);
+        float c2 = StringToFloatRight(cell2);
         String c3 = String.format("%.2f", c1*c2);
         return PlacePrice(c3);
     }
@@ -55,15 +55,29 @@ public class UpdateTable {
 
             // 5 000,00 €
             case 7:
-                return s = "      " + s + " €";
+                s = spaceForBigNumbers(1, s);
+                return s = "     " + s + " €";
 
             // 50 000,00 €
             case 8:
-                return s = "    " + s + " €";
+                s = spaceForBigNumbers(2, s);
+                return s = "   " + s + " €";
+
+            // 500 000,00 €
+            case 9:
+                s = spaceForBigNumbers(3, s);
+                return s = " " + s + " €";
 
             default:
                 return s = s + " €";
         }
+    }
+
+    public String spaceForBigNumbers (int length, String s) {
+        String first = s.substring(0, length);
+        String second = s.substring(length);
+
+        return first + " " + second;
     }
 
     public void SetCell (int row, int column, String value) {
@@ -74,7 +88,7 @@ public class UpdateTable {
         }
     }
 
-    public float StringToFloat (String s) {
+    public float StringToFloatLeft (String s) {
 
         if (s.equals("L’ens")){
             return 1.00F;
@@ -86,6 +100,13 @@ public class UpdateTable {
 
             return Float.parseFloat(s1[0]);
         }
+    }
+
+    public float StringToFloatRight (String s) {
+        s = s.replace(',', '.');
+        s = s.replaceAll(" ", "");
+
+        return Float.parseFloat(s);
     }
 
     public static String getCellText(TableCell cell) {
