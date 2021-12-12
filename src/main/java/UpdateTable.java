@@ -18,10 +18,10 @@ public class UpdateTable {
         this.document = document;
         document.loadFromFile("DevisVierge.docx");
         section = document.getSections().get(0);
+        table = section.getTables().get(0);
     }
 
     public String ReadTable (int row, int column) {
-        table = section.getTables().get(0);
 
         TableCell cell = table.get(row, column);
         String text = getCellText(cell);
@@ -33,6 +33,13 @@ public class UpdateTable {
         float c1 = StringToFloatLeft(cell1);
         float c2 = StringToFloatRight(cell2);
         String c3 = String.format("%.2f", c1*c2);
+        return PlacePrice(c3);
+    }
+
+    public String AddCells (String cell1, String cell2) {
+        float c1 = StringToFloatTTC(cell1);
+        float c2 = StringToFloatTTC(cell2);
+        String c3 = String.format("%.2f", c1+c2);
         return PlacePrice(c3);
     }
 
@@ -109,12 +116,71 @@ public class UpdateTable {
         return Float.parseFloat(s);
     }
 
+    public float StringToFloatTTC (String s) {
+        s = s.trim();
+        String [] s1 = s.split(" ");
+        s = s1[0].replaceAll(" ", "");
+
+        return Float.parseFloat(s);
+    }
+
     public static String getCellText(TableCell cell) {
         StringBuilder text = new StringBuilder();
         for (int i = 0; i < cell.getParagraphs().getCount(); i++) {
             text.append(cell.getParagraphs().get(i).getText().trim());
         }
         return text.toString();
+    }
+
+    public void MainUpdateTable () {
+        TableRow lastRow = table.getLastRow();
+        int tableLength = lastRow.getRowIndex();
+        float total = 0;
+        String ht = "1";
+        String tva = "";
+
+        for (int i=0; i<tableLength-14; i++) {
+
+            String s = ReadTable(i,1);
+            String s2 = ReadTable(i,2);
+
+            if (!(s == "") || !(s2 == "")) {
+
+                String s3 = MultiplyCells(s,s2);
+                SetCell(i,3,s3);
+
+                String totalString = s3.replace("€", "");
+                totalString = totalString.replace(',', '.');
+                totalString = totalString.replaceAll(" ", "");
+                float totalStringInFloat = Float.parseFloat(totalString);
+
+                total += totalStringInFloat;
+            }
+        }
+
+        for (int i=0; i<tableLength; i++) {
+
+            String s = ReadTable(i,0);
+
+            if (s.equals("MONTANT H.T.")) {
+                ht = PlacePrice(String.valueOf(total));
+                SetCell(i,3,ht);
+            }
+
+            if (s.contains("T.V.A")) {
+                String [] s1 = s.split(" ");
+                String s2 = s1[1];
+                s2 = s2.replace(",", ".");
+
+                tva = PlacePrice(String.valueOf(total*(Float.parseFloat(s2))/100));
+                SetCell(i,3,tva);
+            }
+
+            if (s.equals("MONTANT T.T.C.")) {
+                String ttc = AddCells(ht, tva);
+                SetCell(i,3,ttc);
+            }
+        }
     }
 
     public void SaveDoc (String output) {

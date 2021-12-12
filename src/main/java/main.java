@@ -30,10 +30,11 @@ public class main {
         doc.SaveDoc("output.docx");*/
 
         UpdateTable doc = new UpdateTable(new Document());
-        String s = doc.ReadTable(6,1);
+        /*String s = doc.ReadTable(6,1);
         String s2 = doc.ReadTable(6,2);
         String s3 = doc.MultiplyCells(s,s2);
-        doc.SetCell(6,3,s3);
+        doc.SetCell(6,3,s3);*/
+        doc.MainUpdateTable();
         doc.SaveDoc("output2.docx");
     }
 
