@@ -100,6 +100,10 @@ public class UpdateTable {
         if (s.equals("L’ens")){
             return 1.00F;
         }
+        else if (s.contains("h")) {
+            String [] s1 = s.split("h");
+            return Float.parseFloat(s1[0]);
+        }
         else {
             s = s.replace(',', '.');
 
@@ -117,9 +121,10 @@ public class UpdateTable {
     }
 
     public float StringToFloatTTC (String s) {
-        s = s.trim();
-        String [] s1 = s.split(" ");
-        s = s1[0].replaceAll(" ", "");
+        s = s.replace("€", "");
+        s = s.replace(",", ".");
+        s = s.replaceAll(" ", "");
+        s = s.replaceAll(" ", "");
 
         return Float.parseFloat(s);
     }
@@ -136,6 +141,8 @@ public class UpdateTable {
         TableRow lastRow = table.getLastRow();
         int tableLength = lastRow.getRowIndex();
         float total = 0;
+        boolean deduc = false;
+        String soldeHt = "";
         String ht = "1";
         String tva = "";
 
@@ -167,17 +174,38 @@ public class UpdateTable {
                 SetCell(i,3,ht);
             }
 
+            if (s.contains("Déduction Facture")) {
+                deduc = true;
+                String deduction = ReadTable(i, 3);
+                deduction = deduction.replace("€", "");
+                deduction = deduction.replace(",", ".");
+                deduction = deduction.replaceAll(" ", "");
+                deduction = deduction.replaceAll(" ", "");
+                float deductionFloat = Float.parseFloat(deduction);
+                total += deductionFloat;
+            }
+
+            if (s.contains("SOLDE H.T.")) {
+                soldeHt = PlacePrice(String.format("%.2f", total));
+                SetCell(i,3,soldeHt);
+            }
+
             if (s.contains("T.V.A")) {
                 String [] s1 = s.split(" ");
                 String s2 = s1[1];
                 s2 = s2.replace(",", ".");
 
-                tva = PlacePrice(String.valueOf(total*(Float.parseFloat(s2))/100));
+                tva = PlacePrice(String.format("%.2f", total*(Float.parseFloat(s2))/100));
                 SetCell(i,3,tva);
             }
 
             if (s.equals("MONTANT T.T.C.")) {
-                String ttc = AddCells(ht, tva);
+                String ttc;
+                if (deduc){
+                    ttc = AddCells(soldeHt, tva);
+                } else {
+                    ttc = AddCells(ht, tva);
+                }
                 SetCell(i,3,ttc);
             }
         }
