@@ -7,6 +7,7 @@ import com.spire.doc.collections.ParagraphCollection;
 import com.spire.doc.documents.Paragraph;
 
 import java.text.DecimalFormat;
+import java.util.regex.Pattern;
 
 public class UpdateTable {
 
@@ -16,7 +17,7 @@ public class UpdateTable {
 
     public UpdateTable(Document document) {
         this.document = document;
-        document.loadFromFile("DevisVierge.docx");
+        document.loadFromFile("Devis.docx");
         section = document.getSections().get(0);
         table = section.getTables().get(0);
     }
@@ -97,7 +98,7 @@ public class UpdateTable {
 
     public float StringToFloatLeft (String s) {
 
-        if (s.equals("L’ens")){
+        if (s.contains("ens")){
             return 1.00F;
         }
         else if (s.contains("h")) {
