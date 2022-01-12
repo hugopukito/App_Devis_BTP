@@ -138,6 +138,81 @@ public class UpdateTable {
         return text.toString();
     }
 
+    public void PlaceEverything() {
+
+        TableRow lastRow = table.getLastRow();
+        int tableLength = lastRow.getRowIndex();
+
+        for (int i=0; i<tableLength-14; i++) {
+
+            String s = ReadTable(i,1);
+
+            int j = s.length();
+
+            switch (j) {
+
+                case 5:
+                    s = "     " + s;
+                    break;
+
+                case 6:
+                    s = "   " + s;
+                    break;
+
+                case 7:
+                    s = "  " + s;
+                    break;
+
+                case 8:
+                    break;
+
+                default:
+                    break;
+            }
+
+            SetCell(i,1,s);
+        }
+
+        for (int i=0; i<tableLength-14; i++) {
+
+            String s = ReadTable(i,2);
+
+            int j = s.length();
+
+            switch (j) {
+
+                // 5,00
+                case 4 :
+                    s = "       " + s;
+                    break;
+
+                // 50,00
+                case 5:
+                    s = "     " + s;
+                    break;
+
+                // 500,00
+                case 6:
+                    s = "   " + s;
+                    break;
+
+
+                // 5 000,00
+                case 8:
+                    break;
+
+                // 50 000,00
+                case 9:
+                    break;
+
+
+                default:
+            }
+
+            SetCell(i,2,s);
+        }
+    }
+
     public void MainUpdateTable () {
         TableRow lastRow = table.getLastRow();
         int tableLength = lastRow.getRowIndex();
@@ -171,7 +246,7 @@ public class UpdateTable {
             String s = ReadTable(i,0);
 
             if (s.equals("MONTANT H.T.")) {
-                ht = PlacePrice(String.valueOf(total));
+                ht = PlacePrice(String.valueOf(String.format("%.2f", total)));
                 SetCell(i,3,ht);
             }
 
@@ -210,6 +285,7 @@ public class UpdateTable {
                 SetCell(i,3,ttc);
             }
         }
+        PlaceEverything();
     }
 
     public void SaveDoc (String output) {
