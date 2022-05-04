@@ -1,37 +1,20 @@
 import com.spire.doc.Document;
-import com.spire.doc.Section;
-import com.spire.doc.Table;
-import com.spire.doc.TableCell;
-import com.spire.doc.documents.UnderlineStyle;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.concurrent.ExecutionException;
 
 public class main {
     public static void main(String[] args) throws Exception {
-
-        /*Doc doc = new Doc(new Document());
-
-        doc.SetTopMargin();
-
-        doc.CreateParagraph();
-
-        doc.ApplyStyle(doc.CreateStyle("style1", "Times New Roman", 12f));
-
-        doc.HorizontalAlignment();
-
-        doc.AddRightIndentation();
-
-        doc.AddSpace(1, 40f);
-        doc.AddSpace(4, 98f);
-
-        doc.CreateTable();
-
-        doc.SaveDoc("output.docx");*/
-
-        UpdateTable doc = new UpdateTable(new Document());
-        doc.MainUpdateTable();
-        doc.SaveDoc("output2.docx");
+        try {
+            UpdateTable doc = new UpdateTable(new Document());
+            doc.MainUpdateTable();
+            doc.SaveDoc("output2.docx");
+        } catch (Exception e) {
+            FileWriter file_writer = new FileWriter("error.txt");
+            file_writer.write(e.toString());
+            file_writer.close();
+        }
     }
 
 
