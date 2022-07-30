@@ -12,10 +12,8 @@ public class main {
             doc.SaveDoc("output2.docx");
         } catch (Exception e) {
             FileWriter file_writer = new FileWriter("error.txt");
-            file_writer.write(e.toString());
+            file_writer.write(e.getMessage());
             file_writer.close();
         }
     }
-
-
 }

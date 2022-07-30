@@ -7,27 +7,26 @@ import com.spire.doc.collections.ParagraphCollection;
 import com.spire.doc.documents.Paragraph;
 
 import java.text.DecimalFormat;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class UpdateTable {
 
-    private Document document;
-    private Section section;
-    private Table table;
+    private final Document document;
+    private final Table table;
 
     public UpdateTable(Document document) {
         this.document = document;
         document.loadFromFile("Devis.docx");
-        section = document.getSections().get(0);
+        Section section = document.getSections().get(0);
         table = section.getTables().get(0);
     }
 
     public String ReadTable (int row, int column) {
 
         TableCell cell = table.get(row, column);
-        String text = getCellText(cell);
 
-        return text;
+        return getCellText(cell);
     }
 
     public String MultiplyCells (String cell1, String cell2) {
@@ -213,7 +212,7 @@ public class UpdateTable {
         }
     }
 
-    public void MainUpdateTable () {
+    public void MainUpdateTable () throws Exception {
         TableRow lastRow = table.getLastRow();
         int tableLength = lastRow.getRowIndex();
         float total = 0;
@@ -227,9 +226,14 @@ public class UpdateTable {
             String s = ReadTable(i,1);
             String s2 = ReadTable(i,2);
 
-            if (!(s == "") || !(s2 == "")) {
+            if (!(Objects.equals(s, "")) || !(Objects.equals(s2, ""))) {
+                String s3 = "";
+                try {
+                    s3 = MultiplyCells(s,s2);
+                } catch (Exception e) {
+                    throw new Exception("Problème ligne " + (i+1));
+                }
 
-                String s3 = MultiplyCells(s,s2);
                 SetCell(i,3,s3);
 
                 String totalString = s3.replace("€", "");
