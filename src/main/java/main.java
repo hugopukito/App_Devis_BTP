@@ -11,6 +11,7 @@ public class main {
             doc.MainUpdateTable();
             doc.SaveDoc("output2.docx");
         } catch (Exception e) {
+            System.out.println(e);
             FileWriter file_writer = new FileWriter("error.txt");
             file_writer.write(e.getMessage());
             file_writer.close();

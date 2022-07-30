@@ -226,6 +226,12 @@ public class UpdateTable {
             String s = ReadTable(i,1);
             String s2 = ReadTable(i,2);
 
+            /* space for big numbers with no space in it */
+            if (s2.length() > 6 && !s2.contains(" ")) {
+                String col2Value = spaceForBigNumbers(s2.length()-6, s2);
+                SetCell(i,2,col2Value);
+            }
+
             if (!(Objects.equals(s, "")) || !(Objects.equals(s2, ""))) {
                 String s3 = "";
                 try {
