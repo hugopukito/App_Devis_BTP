@@ -29,7 +29,7 @@ public class UpdateTable {
         return getCellText(cell);
     }
 
-    public String MultiplyCells (String cell1, String cell2) {
+    public String MultiplyCells (String cell1, String cell2)  {
         float c1 = StringToFloatLeft(cell1);
         float c2 = StringToFloatRight(cell2);
         String c3 = String.format("%.2f", c1*c2);
@@ -234,10 +234,19 @@ public class UpdateTable {
 
             if (!(Objects.equals(s, "")) || !(Objects.equals(s2, ""))) {
                 String s3 = "";
+                if (!s.contains("ens") && !s.contains("h")) {
+                    if (!s.contains(" ")) {
+                        throw new Exception("Problème ligne " + (i+1)
+                                + " pour le texte colone 1: " + s +
+                                " et le texte colone 2: " + s2 + " " +
+                                "peut-être besoin d'un espace sur " + s);
+                    }
+                }
                 try {
                     s3 = MultiplyCells(s,s2);
                 } catch (Exception e) {
-                    throw new Exception("Problème ligne " + (i+1));
+                    throw new Exception("Problème ligne " + (i+1)
+                    + " pour le texte colone 1: " + s + " et le texte colone 2: " + s2);
                 }
 
                 SetCell(i,3,s3);
