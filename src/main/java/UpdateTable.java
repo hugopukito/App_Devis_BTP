@@ -15,9 +15,9 @@ public class UpdateTable {
     private final Document document;
     private final Table table;
 
-    public UpdateTable(Document document) {
+    public UpdateTable(Document document, String path) {
         this.document = document;
-        document.loadFromFile("Devis.docx");
+        document.loadFromFile(path);
         Section section = document.getSections().get(0);
         table = section.getTables().get(0);
     }

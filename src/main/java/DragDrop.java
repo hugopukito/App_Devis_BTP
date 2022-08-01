@@ -1,9 +1,12 @@
+import com.spire.doc.Document;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.List;
 
 class DragDrop implements DropTargetListener {
@@ -41,8 +44,21 @@ class DragDrop implements DropTargetListener {
                     // Loop them through
                     for (Object item : files) {
                         File file = (File) item;
-                        // Print out the file path
-                        System.out.println(file.getPath());
+                        boolean failed = false;
+                        try {
+                            UpdateTable doc = new UpdateTable(new Document(), file.getPath());
+                            doc.MainUpdateTable();
+                            doc.SaveDoc(file.getParent() + "\\output.docx");
+                        } catch (Exception e) {
+                            failed = true;
+                            label.setForeground(Color.red);
+                            label.setText(e.getMessage());
+                        } finally {
+                            if (!failed) {
+                                label.setForeground(myGreen);
+                                label.setText("Finis !");
+                            }
+                        }
                     }
                 }
             } catch (Exception e) {

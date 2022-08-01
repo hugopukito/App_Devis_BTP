@@ -1,1 +1,0 @@
-Problème ligne 23 pour le texte colone 1: caca et le texte colone 2: 350,00 besoin d'un espace sur caca
