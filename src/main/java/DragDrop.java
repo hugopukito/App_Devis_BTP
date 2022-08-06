@@ -7,6 +7,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.dnd.*;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 class DragDrop implements DropTargetListener {
@@ -33,6 +34,7 @@ class DragDrop implements DropTargetListener {
         Transferable transferable = event.getTransferable();
         // Get the data formats of the dropped item
         DataFlavor[] flavors = transferable.getTransferDataFlavors();
+
         // Loop through the flavors
         for (DataFlavor flavor : flavors) {
             try {
@@ -48,9 +50,17 @@ class DragDrop implements DropTargetListener {
                         try {
                             UpdateTable doc = new UpdateTable(new Document(), file.getPath());
                             doc.MainUpdateTable();
-                            doc.SaveDoc(file.getParent() + "\\output.docx");
+
+                            JFileChooser f = new JFileChooser(file.getParent());
+                            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                            f.showSaveDialog(null);
+
+                            doc.SaveDoc(f.getSelectedFile() + "\\new_" + file.getName());
                         } catch (Exception e) {
                             failed = true;
+                            frame.getRootPane().setBorder(BorderFactory.createMatteBorder(4,3,3,3, Color.red));
+                            frame.setSize(1920,1080/4);
+                            frame.setLocationRelativeTo(null);
                             label.setForeground(Color.red);
                             label.setText(e.getMessage());
                         } finally {
