@@ -144,7 +144,14 @@ public class UpdateTable {
 
         for (int i=0; i<tableLength-14; i++) {
 
-            String s = ReadTable(i,1);
+            String s = "";
+
+            try {
+                s = ReadTable(i,1);
+            } catch (Exception e) {
+                continue;
+            }
+            
 
             int j = s.length();
 
@@ -174,7 +181,13 @@ public class UpdateTable {
 
         for (int i=0; i<tableLength-14; i++) {
 
-            String s = ReadTable(i,2);
+            String s = "";
+
+            try {
+                s = ReadTable(i,2);
+            } catch (Exception e) {
+                continue;
+            }
 
             int j = s.length();
 
@@ -223,8 +236,17 @@ public class UpdateTable {
 
         for (int i=0; i<tableLength-14; i++) {
 
-            String s = ReadTable(i,1);
-            String s2 = ReadTable(i,2);
+            String s = "";
+            String s2 = "";
+
+            try {
+                s = ReadTable(i,1);
+                s2 = ReadTable(i,2);
+            } catch (Exception e) {
+                System.out.println("error there");
+                continue;
+            }
+            
 
             /* space for big numbers with no space in it */
             if (s2.length() > 6 && !s2.contains(" ")) {

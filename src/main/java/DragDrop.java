@@ -79,6 +79,7 @@ class DragDrop implements DropTargetListener {
                             frame.setLocationRelativeTo(null);
                             label.setForeground(Color.red);
                             label.setText(e.getMessage());
+                            e.printStackTrace();
                         } finally {
                             if (!failed) {
                                 label.setForeground(myGreen);
